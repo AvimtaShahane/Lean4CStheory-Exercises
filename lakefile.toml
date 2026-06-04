@@ -1,0 +1,12 @@
+name = "Lean4CStheoryExercises"
+version = "0.1.0"
+defaultTargets = ["Lean4CStheoryExercises"]
+
+[[require]]
+name = "Lean4CStheory"
+git = "https://github.com/Lean4CStheory/Lean4CStheory-Library.git"
+rev = "v0.1"
+
+[[lean_lib]]
+name = "Lean4CStheoryExercises"
+globs = ["Lean4CStheoryExercises.+"]
