@@ -62,7 +62,7 @@ example {a b : ℝ} (h1 : a = 3) (h2 : b = -1) : a + b = 2 :=
     _ = 2 := by norm_num
 
 -- (1 point) Exercise 0.1
-@[exercise "0.1"]
+@[exercise "0.1" 1]
 theorem exercise_0_1 {a b : ℝ} (h1 : a = 3) (h2 : b = 4) : a + 2 * b = 11 :=
   sorry
 
@@ -72,7 +72,7 @@ example {n : ℕ} (h1 : c = 1) : 2 * n + 10 ≥ c * 2 := by
   simp
 
 -- (1 point) Exercise 0.2
-@[exercise "0.2"]
+@[exercise "0.2" 1]
 theorem exercise_0_2 {n : ℕ} (h1 : c = 3) : 5 * n + 6 ≥ c := by
   sorry
 
@@ -90,7 +90,7 @@ example {n : ℕ} (h1 : c = 5) : 4 * n ≤ c * n := by
   linarith
 
 -- (1 point) Exercise 0.3
-@[exercise "0.3"]
+@[exercise "0.3" 1]
 theorem exercise_0_3 {n : ℕ} (h1 : c = 2) : 4 * n + 3 ≥ c * (n + 1) := by
   sorry
 
@@ -111,7 +111,7 @@ example {n : ℕ} (h1 : n ≥ 2) (h2 : c₁ = 1) (h3 : c₂ = 4) :
   · linarith [h1]
 
 -- (1 point) Exercise 0.4
-@[exercise "0.4"]
+@[exercise "0.4" 1]
 theorem exercise_0_4 {n : ℕ} (h1 : n ≥ 10) (h2 : c₁ = 1) (h3 : c₂ = 10) :
   c₁ * (2 * n + 1) ≤ 5 * n ∧ 5 * n ≤ c₂ * (2 * n + 1) := by
   sorry
@@ -131,13 +131,13 @@ def isBigO (f g : ℕ → ℝ) : Prop :=
 
 -- (1 point) Exercise 1.1
 -- Define Big-Omega using the same style as Big-O.
-@[exercise "1.1"]
+@[exercise "1.1" 1]
 def isBigOmega (f g : ℕ → ℝ) : Prop :=
   sorry
 
 -- (1 point) Exercise 1.2
 -- Define Big-Theta using Big-O and Big-Omega.
-@[exercise "1.2"]
+@[exercise "1.2" 1]
 def isBigTheta (f g : ℕ → ℝ) : Prop :=
   sorry
 
@@ -152,17 +152,17 @@ example : isBigO (fun n ↦ (2 : ℝ) * n + 4) (fun n ↦ n) := by
     _ = 3 * n := by ring
 
 -- (1 point) Exercise 1.3
-@[exercise "1.3"]
+@[exercise "1.3" 1]
 theorem exercise_1_3 : isBigO (fun n ↦ (3 : ℝ) * n + 2) (fun n ↦ n) := by
   sorry
 
 -- (1 point) Exercise 1.4
-@[exercise "1.4"]
+@[exercise "1.4" 1]
 theorem exercise_1_4 : isBigOmega (fun n ↦ (3 : ℝ) * n + 2) (fun n ↦ n) := by
   sorry
 
 -- (1 point) Exercise 1.5
-@[exercise "1.5"]
+@[exercise "1.5" 1]
 theorem exercise_1_5 : isBigTheta (fun n ↦ (3 : ℝ) * n + 2) (fun n ↦ n) := by
   sorry
 
@@ -193,7 +193,7 @@ def sumOdd : ℕ → ℕ
   | 0     => 1
   | n + 1 => sumOdd n + (2 * (n + 1) + 1)
 
-@[exercise "2.1"]
+@[exercise "2.1" 2]
 theorem exercise_2_1 (n : ℕ) : sumOdd n = (n + 1) ^ 2 := by
   induction n with
   | zero =>
@@ -204,7 +204,7 @@ theorem exercise_2_1 (n : ℕ) : sumOdd n = (n + 1) ^ 2 := by
 -- (1 point) Exercise 2.2
 -- Define the Fibonacci function fib(n).
 -- Only the function definition is required.
-@[exercise "2.2"]
+@[exercise "2.2" 1]
 def fib : ℕ → ℕ :=
   sorry
 

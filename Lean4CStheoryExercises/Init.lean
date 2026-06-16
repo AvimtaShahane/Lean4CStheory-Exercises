@@ -11,15 +11,23 @@ initialize studentCodeAttr : Lean.TagAttribute ←
     "Marks declarations that are written by students."
 
 
-syntax (name := Parser.Attr.exercise) "exercise" (ppSpace str)? : attr
+structure ExerciseInfo where
+  exerciseId? : Option String
+  points? : Option Nat
+  deriving Inhabited
 
-/-- Allow using `@[exercise "1.1"]` to mark declarations related to a specific exercise -/
-initialize exerciseAttr : Lean.ParametricAttribute (Option String) ←
+syntax (name := Parser.Attr.exercise) "exercise" (ppSpace str)? (ppSpace num)? : attr
+
+/-- Allow using `@[exercise "1.1" 2]` to mark declarations related to a specific exercise. -/
+initialize exerciseAttr : Lean.ParametricAttribute ExerciseInfo ←
   Lean.registerParametricAttribute {
     name := `exercise
     descr := "Marks declarations that are part of an exercise."
     getParam := fun _ stx => do
-      let `(attr| exercise $[$s:str]?) := stx
+      let `(attr| exercise $[$s:str]? $[$points:num]?) := stx
         | throwError "Invalid `[exercise]` attribute syntax"
-      return s.map Lean.TSyntax.getString
+      return {
+        exerciseId? := s.map Lean.TSyntax.getString
+        points? := points.map Lean.TSyntax.getNat
+      }
   }
