@@ -138,7 +138,6 @@ asks for it, but you should write down a precise correctness specification.
 - **Count Inversions:** the returned number equals the true inversion count.
 - **Quick Sort:** the output is sorted and contains the same elements.
 - **Selection:** the output is the correct kth smallest element.
-- **Polynomial Multiplication:** the output equals the correct polynomial product.
 
 ### What students should do here
 Using the Merge Sort example as a guide, write:

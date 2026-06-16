@@ -47,7 +47,6 @@ You must choose **one** of the following algorithms:
 - Knapsack Problem
 - LCS Problem (Longest Common Subsequence)
 - Matrix Chain Multiplication Problem
-- Optimum Binary Search Tree
 
 ## What you should do
 
