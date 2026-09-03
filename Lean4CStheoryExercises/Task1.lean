@@ -2,7 +2,10 @@
 
 -- Instructions for Lean Task Project
 -- 1. Coding Environment
---     * Complete this task in the Lean online editor: https://live.lean-lang.org/
+--     * Complete this task in the checked-out Lean4CStheory-Exercises project.
+--     * Open this file in VS Code using the Lean extension.
+--     * You may use Lean Online for small standalone experiments, but the complete
+--       task depends on project-local definitions and must compile in this project.
 --     * Submit a single Lean file that compiles without errors.
 -- 2. Learning Resources
 --     * Official Lean documentation:
@@ -229,7 +232,7 @@ end recursion
 /-!
 ## Part II: Algorithm Warmup Exercises
 
-These exercises use tiny graph and scheduling models to practice reading
+These exercises use tiny graph models to practice reading
 definitions and filling in one, two, or three small proof steps.
 
 Useful tactics in this part:
@@ -473,159 +476,5 @@ theorem exercise_6_3 : DfsTime 0 < DfsTime 3 := by
   exact Nat.lt_trans h01 h13
 
 end dfs
-
-section box_packing
-/-!
-### Section 7: Box Packing
-
-Story:
-
-There are three snacks: 0, 1, and 2.
-There are two lunchboxes: 0 and 1.
-Snack 0 goes in box 0.
-Snack 1 goes in box 0.
-Snack 2 goes in box 1.
--/
-
-def Snack (item : Nat) : Prop :=
-  item = 0 ∨ item = 1 ∨ item = 2
-
-def LunchBox (box : Nat) : Prop :=
-  box = 0 ∨ box = 1
-
-def BoxOfSnack : Nat -> Nat
-  | 0 => 0
-  | 1 => 0
-  | 2 => 1
-  | _ => 0
-
-def Capacity : Nat -> Nat
-  | 0 => 5
-  | 1 => 4
-  | _ => 0
-
-def Load : Nat -> Nat
-  | 0 => 5
-  | 1 => 4
-  | _ => 0
-
-def AssignedTo (item box : Nat) : Prop :=
-  BoxOfSnack item = box
-
-def BoxFits (box : Nat) : Prop :=
-  Load box ≤ Capacity box
-
--- Example 7.1
-example : Snack 0 ∧ LunchBox (BoxOfSnack 0) := by
-  constructor
-  · left
-    norm_num [Snack]
-  · left
-    norm_num [LunchBox, BoxOfSnack]
-
--- (1 point) Exercise 7.1
-@[exercise "7.1" 1]
-theorem exercise_7_1 : Snack 2 ∧ LunchBox (BoxOfSnack 2) := by
-  constructor
-  · sorry
-  · sorry
-
--- Example 7.2
-example : AssignedTo 1 0 := by
-  norm_num [AssignedTo, BoxOfSnack]
-
--- (1 point) Exercise 7.2
-@[exercise "7.2" 1]
-theorem exercise_7_2 : AssignedTo 2 1 := by
-  sorry
-
--- Example 7.3
-example {boxOne boxTwo : Nat}
-    (h1 : AssignedTo 1 boxOne) (h2 : AssignedTo 1 boxTwo) :
-    boxOne = boxTwo := by
-  rw [AssignedTo] at h1
-  rw [AssignedTo] at h2
-  calc
-    boxOne = BoxOfSnack 1 := by
-      symm
-      exact h1
-    _ = boxTwo := by
-      exact h2
-
--- (1 point) Exercise 7.3
-@[exercise "7.3" 1]
-theorem exercise_7_3 {boxOne boxTwo : Nat}
-    (h1 : AssignedTo 2 boxOne) (h2 : AssignedTo 2 boxTwo) :
-    boxOne = boxTwo := by
-  rw [AssignedTo] at h1
-  rw [AssignedTo] at h2
-  calc
-    boxOne = BoxOfSnack 2 := by
-      sorry
-    _ = boxTwo := by
-      sorry
-
--- Example 7.4
-example : BoxFits 0 := by
-  norm_num [BoxFits, Capacity, Load]
-
--- (1 point) Exercise 7.4
-@[exercise "7.4" 1]
-theorem exercise_7_4 : BoxFits 1 := by
-  sorry
-
-end box_packing
-
-section interval_scheduling
-/-!
-### Section 8: Interval Scheduling
-
-Think of an interval as an activity with a start time and a finish time.
--/
-
-structure Interval where
-  start : Nat
-  finish : Nat
-  deriving Repr
-
-def NonOverlapping (i j : Interval) : Prop :=
-  i.finish ≤ j.start ∨ j.finish ≤ i.start
-
-def FinishesNoLater (i j : Interval) : Prop :=
-  i.finish ≤ j.finish
-
-def warmup : Interval := { start := 1, finish := 3 }
-def lecture : Interval := { start := 3, finish := 5 }
-def snackBreak : Interval := { start := 0, finish := 2 }
-def lab : Interval := { start := 4, finish := 7 }
-def homework : Interval := { start := 1, finish := 4 }
-def review : Interval := { start := 3, finish := 6 }
-def project : Interval := { start := 6, finish := 9 }
-
--- Example 8.1
-example : NonOverlapping warmup lecture := by
-  left
-  norm_num [NonOverlapping, warmup, lecture]
-
--- (1 point) Exercise 8.1
-@[exercise "8.1" 1]
-theorem exercise_8_1 : NonOverlapping snackBreak lab := by
-  left
-  sorry
-
--- Example 8.2
-example : FinishesNoLater warmup review := by
-  norm_num [FinishesNoLater, warmup, review]
-
--- (1 point) Exercise 8.2
-@[exercise "8.2" 1]
-theorem exercise_8_2 : FinishesNoLater homework project := by
-  have h1 : FinishesNoLater homework review := by
-    sorry
-  have h2 : FinishesNoLater review project := by
-    sorry
-  exact Nat.le_trans h1 h2
-
-end interval_scheduling
 
 end Lean4CStheoryExercises.Task1
