@@ -21,7 +21,7 @@
 --     * Your own solutions must be clearly distinguishable from AI references.
 
 import Lean4CStheoryExercises.Init
-import Lean4CStheory.Asymptotics.MastersTheorem
+import Lean4CStheory.Asymptotics.MasterTheorem
 import Lean4CStheory.Algorithms.DivideConquer
 
 namespace Lean4CStheoryExercises.DivideConquerExercise
