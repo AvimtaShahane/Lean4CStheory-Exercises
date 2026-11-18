@@ -47,9 +47,10 @@ example : ([1, 3, 6].takeWhile (fun finish => finish <= 4)).length = 2 := by
 -- (1 point) Exercise W.1: an earlier job must finish by the new job's start.
 -- The result is p(j), the number of earlier compatible jobs.
 -- p(j) counts a prefix of the sorted list; it is not an array index of a job.
+-- Prompt: (Claude) asked for help completing Task 2C; W.1: an earlier job is compatible if it finishes by job.start.
 @[exercise "W.1" 1]
 def predecessor (earlier : List Job) (job : Job) : Nat :=
-  (earlier.takeWhile (fun j => j.finish <= sorry)).length
+  (earlier.takeWhile (fun j => j.finish <= job.start)).length
 
 /-!
 ## 2. Complete the recurrence
@@ -66,7 +67,8 @@ example : max 8 (6 + 5) = 11 := by decide
 -- (1 point) Exercise W.2: complete the "take this job" value.
 @[exercise "W.2" 1]
 def bestValue (skip weight compatibleBest : Nat) : Nat :=
-  max skip (sorry)
+  -- Prompt: (Claude) asked for help completing Task 2C; W.2: take value = weight + OPT(p(j)).
+  max skip (weight + compatibleBest)
 
 -- Provided: read the skip and take values from the table.
 -- table[k] stores OPT(k); getD reads an entry, with a default of 0.
@@ -106,7 +108,8 @@ theorem recurrence_candidates (skip weight compatibleBest : Nat) :
   unfold bestValue
   constructor
   · exact Nat.le_max_left _ _
-  · sorry
+  -- Prompt: (Claude) asked for help completing Task 2C; W.3: mirror of the given half.
+  · exact Nat.le_max_right _ _
 
 -- (1 point) Exercise W.4: if both choices are at most bound, so is their max.
 @[exercise "W.4" 1]
@@ -114,7 +117,8 @@ theorem recurrence_upper (skip weight compatibleBest bound : Nat)
     (hskip : skip <= bound) (htake : weight + compatibleBest <= bound) :
     bestValue skip weight compatibleBest <= bound := by
   unfold bestValue
-  sorry
+  -- Prompt: (Claude) asked for help completing Task 2C; W.4: max of two values under a bound is under the bound.
+  exact max_le hskip htake
 
 /-! ## 4. Check a small example -/
 
@@ -137,20 +141,22 @@ The table also includes OPT(0)=0 at its beginning.
 -- (1 point) Exercise W.5: check the table.
 @[exercise "W.5" 1]
 theorem sample_table : buildTable sample = #[0, 5, 6, 10, 14] := by
-  sorry
+  -- Prompt: (Claude) asked for help completing Task 2C; W.5: concrete computation, checked by evaluation.
+  rfl
 
 -- (1 point) Exercise W.6: earliest-finish greedy is not safe with weights.
 -- It would choose the first two jobs for weight 4, missing the weight-10 job.
 @[exercise "W.6" 1]
 theorem greedy_counterexample :
     optimumValue [⟨0, 2, 2⟩, ⟨2, 4, 2⟩, ⟨0, 5, 10⟩] = 10 := by
-  sorry
+  -- Prompt: (Claude) asked for help completing Task 2C; W.6: concrete computation, checked by evaluation.
+  decide
 
 /-!
 After W.1-W.2, uncomment these lines:
 -/
--- #eval buildTable sample  -- #[0, 5, 6, 10, 14]
--- #eval optimumValue []    -- 0
+#eval buildTable sample  -- #[0, 5, 6, 10, 14]
+#eval optimumValue []    -- 0
 
 /-!
 Takeaway: when taking job j, add OPT(p(j)) because those earlier jobs

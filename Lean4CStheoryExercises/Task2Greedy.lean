@@ -44,14 +44,16 @@ def largestFit (capacity : Nat) : List Nat -> Option Nat
   | item :: rest =>
       let best := largestFit capacity rest
       if item <= capacity then
-        sorry
+        -- Prompt: (Claude) asked for help completing Task 2A; G.1: keep the larger of item and best.
+        keepLarger item best
       else best
 
 -- (1 point) Exercise G.2: remove the chosen item before packing the next box.
 -- Remove only one occurrence when several items have the chosen size.
 @[exercise "G.2" 1]
 def removeChosen (items : List Nat) (item : Nat) : List Nat :=
-  sorry
+  -- Prompt: (Claude) asked for help completing Task 2A; G.2: erase removes only the first occurrence.
+  items.erase item
 
 -- Provided: the full packing loop. No changes needed here.
 -- Output pairs are (capacity, item size).
@@ -72,7 +74,8 @@ Use the order relationships between the item sizes and box capacities.
 @[exercise "G.3" 1]
 theorem larger_fits (a b capacity : Nat)
     (ha : a <= capacity) (hb : b <= capacity) : max a b <= capacity := by
-  sorry
+  -- Prompt: (Claude) asked for help completing Task 2A; G.3: max is at most a common upper bound.
+  exact Nat.max_le.mpr ⟨ha, hb⟩
 
 /-!
 Suppose box c holds item x and box d holds the greedy choice g.
@@ -91,7 +94,8 @@ theorem exchange_safe (c d x g : Nat)
   constructor
   · exact hgreedy
   · -- We know x <= g and g <= d. Join these two inequalities.
-    sorry
+    -- Prompt: (Claude) asked for help completing Task 2A; G.4: transitivity of <=.
+    exact Nat.le_trans hlargest hother
 
 /-! ## 3. Check your algorithm -/
 
@@ -99,13 +103,14 @@ theorem exchange_safe (c d x g : Nat)
 @[exercise "G.5" 1]
 theorem duplicate_items :
     pack [5, 5] [4, 4, 8] = [(5, 4), (5, 4)] := by
-  sorry
+  -- Prompt: (Claude) asked for help completing Task 2A; G.5: concrete computation, checked by evaluation.
+  decide
 
 /-!
 After G.1-G.2, uncomment these lines to test your code:
 -/
--- #eval largestFit 25 [45, 41, 20, 19, 16]  -- some 20
--- #eval (pack [60, 40, 25, 17, 12] [45, 41, 20, 19, 16]).length  -- 4
+#eval largestFit 25 [45, 41, 20, 19, 16]  -- some 20
+#eval (pack [60, 40, 25, 17, 12] [45, 41, 20, 19, 16]).length  -- 4
 
 /-!
 Optional question: why does swapping preserve the number packed?
