@@ -30,19 +30,15 @@ library's Master Theorem corollary, not a library implementation of the algorith
 -- List.count counts occurrences, including repeated equal values.
 example : [4, 1, 4, 4].count 4 = 3 := by decide
 
-/-- An element is a majority when its occurrence count is strictly more than half. -/
 def IsMajority (a : Nat) (xs : List Nat) : Prop :=
   xs.length < 2 * xs.count a
 
--- The result of a timed operation is (answer, number of equality tests).
--- A missing candidate needs no scan. Checking a candidate scans the whole list.
--- (1 point) Exercise Q.1: complete the test for a strict majority.
 @[exercise "Q.1" 1]
 def verifyCandidate (xs : List Nat) : Option Nat → Option Nat × Nat
   | none => (none, 0)
   | some a => ((if xs.length < 2 * xs.count a then some a else none), xs.length)
 
--- (1 point) Exercise Q.2: choose the result after the left candidate fails verification.
+
 @[exercise "Q.2" 1]
 def combineCandidates (xs : List Nat) (left right : Option Nat) : Option Nat × Nat :=
   let checkedLeft := verifyCandidate xs left
@@ -52,8 +48,6 @@ def combineCandidates (xs : List Nat) (left right : Option Nat) : Option Nat × 
       let checkedRight := verifyCandidate xs right
       (checkedRight.1, checkedLeft.2 + checkedRight.2)
 
--- Provided: each candidate check costs at most one full scan.
-/-- Verifying a candidate performs at most one equality test per input element. -/
 lemma verifyCandidate_cost_le (xs : List Nat) (candidate : Option Nat) :
     (verifyCandidate xs candidate).2 ≤ xs.length := by
   cases candidate with
@@ -76,8 +70,6 @@ half its entries equal to that element. Adding the counts rules out a majority
 in the whole list. This fact justifies looking only at the two recursive candidates.
 -/
 
--- (2 points) Exercise Q.3: prove the key fact for any split, including unequal halves.
-/-- A majority of an appended list is a majority in at least one of its two parts. -/
 @[exercise "Q.3" 2]
 theorem majority_in_one_half (a : Nat) (left right : List Nat)
     (h : IsMajority a (left ++ right)) :
@@ -124,9 +116,6 @@ theorem majority_examples :
     majority [2, 1, 2, 3, 2] = some 2 ∧ majority [1, 2, 1, 2] = none := by
   decide +kernel
 
-/-!
-After Q.1-Q.2, uncomment these lines to inspect the result and comparison count:
--/
 #eval majorityRun [2, 1, 2, 3, 2]
 #eval majorityRun []
 #eval majorityRun [7]
@@ -144,8 +133,6 @@ sufficiently large n. `ceilLog2 n` is the ceiling of log_2(n) for positive n.
 open Lean4CStheory.Asymptotics
 open Lean4CStheory.Asymptotics.MasterTheorem
 
--- (1 point) Exercise Q.5: derive the recurrence from majorityRun and the combine bound.
-/-- A nontrivial majority call costs its two recursive calls plus at most two scans. -/
 @[exercise "Q.5" 1]
 theorem majority_cost_step (x y : Nat) (rest : List Nat) :
     let input := x :: y :: rest
@@ -172,8 +159,6 @@ def majorityBound : Nat → Nat
       majorityBound ((n + 2) / 2) +
         majorityBound (n + 2 - (n + 2) / 2) + 2 * (n + 2)
 
--- (1 point) Exercise Q.6: prove the size recurrence from its definition.
-/-- The size bound satisfies the balanced two-branch recurrence with linear extra work. -/
 @[exercise "Q.6" 1]
 theorem majority_bound_step (n : Nat) (hn : 2 ≤ n) :
     majorityBound n =
@@ -182,8 +167,7 @@ theorem majority_bound_step (n : Nat) (hn : 2 ≤ n) :
   subst n
   rw [majorityBound]
 
--- (1 point) Exercise Q.7: use Q.5-Q.6 to bound the algorithm by the size recurrence.
-/-- Every input's comparison count is bounded by the size-only recurrence. -/
+
 @[exercise "Q.7" 1]
 theorem majority_cost_le_bound (xs : List Nat) :
     majorityCost xs ≤ majorityBound xs.length := by
@@ -208,8 +192,7 @@ theorem majority_cost_le_bound (xs : List Nat) :
       rw [majority_bound_step input.length hsize]
       omega
 
--- (1 point) Exercise Q.8: apply the library's Master Theorem to Q.6.
-/-- The majority comparison recurrence has an O(n log n) upper bound. -/
+
 @[exercise "Q.8" 1]
 theorem majority_bound_bigO :
     majorityBound =O (fun n => n * ceilLog2 n) := by
@@ -220,8 +203,7 @@ theorem majority_bound_bigO :
     exact (majority_bound_step n hn).le
   exact master_halves_plus_linear majorityBound 2 hrec
 
--- (1 point) Exercise Q.9: transfer Q.8's bound to the algorithm using Q.7.
-/-- Majority detection uses O(n log n) equality tests uniformly over all input lists. -/
+
 @[exercise "Q.9" 1]
 theorem majority_comparisons_bigO :
     ∃ C N : Nat, ∀ xs : List Nat, N ≤ xs.length →
@@ -230,11 +212,5 @@ theorem majority_comparisons_bigO :
   refine ⟨C, N, ?_⟩
   intro xs hxs
   exact Nat.le_trans (majority_cost_le_bound xs) (hbound xs.length hxs)
-
-/-!
-The splits are balanced by construction, so the bound applies to every input.
-Q.3 proves the key candidate-selection fact; a full inductive correctness proof
-of majorityRun is outside this task's scope.
--/
 
 end Lean4CStheoryExercises.Task2DivideConquer
