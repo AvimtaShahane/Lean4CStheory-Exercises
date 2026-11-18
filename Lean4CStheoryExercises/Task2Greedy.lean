@@ -44,7 +44,6 @@ def largestFit (capacity : Nat) : List Nat -> Option Nat
   | item :: rest =>
       let best := largestFit capacity rest
       if item <= capacity then
-        -- Prompt: (Claude) asked for help completing Task 2A; G.1: keep the larger of item and best.
         keepLarger item best
       else best
 
@@ -52,7 +51,6 @@ def largestFit (capacity : Nat) : List Nat -> Option Nat
 -- Remove only one occurrence when several items have the chosen size.
 @[exercise "G.2" 1]
 def removeChosen (items : List Nat) (item : Nat) : List Nat :=
-  -- Prompt: (Claude) asked for help completing Task 2A; G.2: erase removes only the first occurrence.
   items.erase item
 
 -- Provided: the full packing loop. No changes needed here.
@@ -74,7 +72,6 @@ Use the order relationships between the item sizes and box capacities.
 @[exercise "G.3" 1]
 theorem larger_fits (a b capacity : Nat)
     (ha : a <= capacity) (hb : b <= capacity) : max a b <= capacity := by
-  -- Prompt: (Claude) asked for help completing Task 2A; G.3: max is at most a common upper bound.
   exact Nat.max_le.mpr ⟨ha, hb⟩
 
 /-!
@@ -94,7 +91,6 @@ theorem exchange_safe (c d x g : Nat)
   constructor
   · exact hgreedy
   · -- We know x <= g and g <= d. Join these two inequalities.
-    -- Prompt: (Claude) asked for help completing Task 2A; G.4: transitivity of <=.
     exact Nat.le_trans hlargest hother
 
 /-! ## 3. Check your algorithm -/
@@ -103,21 +99,10 @@ theorem exchange_safe (c d x g : Nat)
 @[exercise "G.5" 1]
 theorem duplicate_items :
     pack [5, 5] [4, 4, 8] = [(5, 4), (5, 4)] := by
-  -- Prompt: (Claude) asked for help completing Task 2A; G.5: concrete computation, checked by evaluation.
   decide
 
-/-!
-After G.1-G.2, uncomment these lines to test your code:
--/
 #eval largestFit 25 [45, 41, 20, 19, 16]  -- some 20
 #eval (pack [60, 40, 25, 17, 12] [45, 41, 20, 19, 16]).length  -- 4
 
-/-!
-Optional question: why does swapping preserve the number packed?
-This exercise proves the swap step, not full optimality. The other cases
-(an empty box or an unpacked greedy item) are discussed in the slides.
-
-Given: this list implementation takes O(n*m) time for n boxes and m items.
--/
 
 end Lean4CStheoryExercises.Task2Greedy

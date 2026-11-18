@@ -40,7 +40,6 @@ def IsMajority (a : Nat) (xs : List Nat) : Prop :=
 @[exercise "Q.1" 1]
 def verifyCandidate (xs : List Nat) : Option Nat → Option Nat × Nat
   | none => (none, 0)
-  -- Prompt: (Claude) asked for help completing Task 2B; Q.1: strict majority means length < 2 * count.
   | some a => ((if xs.length < 2 * xs.count a then some a else none), xs.length)
 
 -- (1 point) Exercise Q.2: choose the result after the left candidate fails verification.
@@ -51,7 +50,6 @@ def combineCandidates (xs : List Nat) (left right : Option Nat) : Option Nat × 
   | some a => (some a, checkedLeft.2)
   | none =>
       let checkedRight := verifyCandidate xs right
-      -- Prompt: (Claude) asked for help completing Task 2B; Q.2: left failed, so return the right check's answer.
       (checkedRight.1, checkedLeft.2 + checkedRight.2)
 
 -- Provided: each candidate check costs at most one full scan.
@@ -86,7 +84,6 @@ theorem majority_in_one_half (a : Nat) (left right : List Nat)
     IsMajority a left ∨ IsMajority a right := by
   unfold IsMajority at *
   simp only [List.length_append, List.count_append] at h
-  -- Prompt: (Claude) asked for help completing Task 2B; Q.3: if both halves fail, the counts add up to a contradiction.
   omega
 
 /-! ## 3. The recursive algorithm
@@ -125,7 +122,6 @@ def majorityCost (xs : List Nat) : Nat := (majorityRun xs).2
 @[exercise "Q.4" 1]
 theorem majority_examples :
     majority [2, 1, 2, 3, 2] = some 2 ∧ majority [1, 2, 1, 2] = none := by
-  -- Prompt: (Claude) asked for help completing Task 2B; Q.4: majorityRun uses well-founded recursion, so let the kernel evaluate it.
   decide +kernel
 
 /-!
@@ -166,7 +162,6 @@ theorem majority_cost_step (x y : Nat) (rest : List Nat) :
     combineCandidates_cost_le input (majority left) (majority right)
   rw [majorityCost, majorityRun]
   change recursiveCost + combineCost ≤ recursiveCost + 2 * input.length
-  -- Prompt: (Claude) asked for help completing Task 2B; Q.5: add recursiveCost to both sides of hcombine.
   omega
 
 -- Provided: a size-only upper bound, with the same two subproblem sizes.
@@ -185,7 +180,6 @@ theorem majority_bound_step (n : Nat) (hn : 2 ≤ n) :
       majorityBound (n / 2) + majorityBound (n - n / 2) + 2 * n := by
   obtain ⟨k, hk⟩ : ∃ k, n = k + 2 := ⟨n - 2, by omega⟩
   subst n
-  -- Prompt: (Claude) asked for help completing Task 2B; Q.6: unfold one step of majorityBound.
   rw [majorityBound]
 
 -- (1 point) Exercise Q.7: use Q.5-Q.6 to bound the algorithm by the size recurrence.
@@ -212,7 +206,6 @@ theorem majority_cost_le_bound (xs : List Nat) :
       rw [hright] at ihRight
       change majorityCost input ≤ majorityBound input.length
       rw [majority_bound_step input.length hsize]
-      -- Prompt: (Claude) asked for help completing Task 2B; Q.7: combine hstep with the two induction hypotheses.
       omega
 
 -- (1 point) Exercise Q.8: apply the library's Master Theorem to Q.6.
@@ -225,7 +218,6 @@ theorem majority_bound_bigO :
         majorityBound (n / 2) + majorityBound (n - n / 2) + 2 * n := by
     intro n hn
     exact (majority_bound_step n hn).le
-  -- Prompt: (Claude) asked for help completing Task 2B; Q.8: Master Theorem with linear combine cost c = 2.
   exact master_halves_plus_linear majorityBound 2 hrec
 
 -- (1 point) Exercise Q.9: transfer Q.8's bound to the algorithm using Q.7.
@@ -237,7 +229,6 @@ theorem majority_comparisons_bigO :
   obtain ⟨C, N, hbound⟩ := majority_bound_bigO
   refine ⟨C, N, ?_⟩
   intro xs hxs
-  -- Prompt: (Claude) asked for help completing Task 2B; Q.9: chain Q.7 with the Big-O bound at n = xs.length.
   exact Nat.le_trans (majority_cost_le_bound xs) (hbound xs.length hxs)
 
 /-!
